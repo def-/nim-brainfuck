@@ -1,0 +1,34 @@
+dependencies:
+  pre:
+    - |
+        if [ ! -x ~/nim/bin/nim ];
+        then
+          sudo apt-get install gcc
+          git clone -b devel --depth 1 git://github.com/araq/nim ~/nim/
+          git clone -b devel --depth 1 git://github.com/nim-lang/csources ~/nim/csources/
+          cd ~/nim/csources
+          sh build.sh
+          if [ ! -a ~/bin/nim ]; then
+            ln -s ~/nim/bin/nim ~/bin/nim
+          fi
+          cd ..
+          bin/nim c koch
+          ./koch boot -d:release
+        else
+          cd ~/nim/
+          git fetch origin
+          if ! git merge FETCH_HEAD | grep "Already up-to-date"; then
+            bin/nim c koch
+            ./koch boot -d:release
+          fi
+        fi
+
+  cache_directories:
+    - "~/bin/"
+    - "~/nim/"
+
+## Customize test commands
+test:
+  override:
+    - nim c -r tests/all
+
