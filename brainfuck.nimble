@@ -1,10 +1,11 @@
 [Package]
 name          = "brainfuck"
 version       = "1.0"
-author        = "The 'How I Start Nim' Team"
+author        = "Dennis Felsing"
 description   = "A brainfuck interpreter and compiler"
 license       = "MIT"
 
+srcDir        = "src"
 bin           = "brainfuck"
 
 [Deps]
