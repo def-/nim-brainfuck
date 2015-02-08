@@ -171,12 +171,6 @@ when isMainModule:
 
   proc mandelbrot = compileFile("../examples/mandelbrot.b")
 
-  #proc mandelbrot =
-  #  var input = ""
-  #  var result: string
-  #  compileFile("../examples/mandelbrot.b", input, result)
-  #  echo result
-
   let doc = """
 brainfuck
 
