@@ -16,6 +16,9 @@
 
 import streams
 
+when not defined(nimnode):
+  type NimNode = PNimrodNode
+
 proc readCharEOF*(input: Stream): char =
   ## Read a character from an `input` stream and return a Unix EOF (-1). This
   ## is necessary because brainfuck assumes Unix EOF while streams use \0 for
@@ -34,6 +37,7 @@ proc interpret*(code: string; input, output: Stream) =
   ##   var inpStream = newStringStream("Hello World!\n")
   ##   var outStream = newFileStream(stdout)
   ##   interpret(readFile("examples/rot13.b"), inpStream, outStream)
+  {.overflowchecks: off.}
   var
     tape = newSeq[char]()
     codePos = 0
@@ -89,7 +93,7 @@ proc interpret*(code: string) =
 
 import macros
 
-proc compile(code, input, output: string): PNimrodNode {.compiletime.} =
+proc compile(code, input, output: string): NimNode {.compiletime.} =
   var stmts = @[newStmtList()]
 
   template addStmt(text): stmt =
