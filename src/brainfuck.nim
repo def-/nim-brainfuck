@@ -25,7 +25,7 @@ proc readCharEOF*(input: Stream): char =
   ## EOF.
   result = input.readChar
   if result == '\0': # Streams return 0 for EOF
-    result = 255.chr # BF assumes EOF to be -1
+    result = '\255'  # BF assumes EOF to be -1
 
 {.push overflowchecks: off.}
 proc xinc*(c: var char) {.inline.} =
