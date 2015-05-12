@@ -27,6 +27,15 @@ proc readCharEOF*(input: Stream): char =
   if result == '\0': # Streams return 0 for EOF
     result = 255.chr # BF assumes EOF to be -1
 
+{.push overflowchecks: off.}
+proc xinc*(c: var char) {.inline.} =
+  ## Increment a character with wrapping instead of overflow checks.
+  inc c
+proc xdec*(c: var char) {.inline.} =
+  ## Decrement a character with wrapping instead of underflow checks.
+  dec c
+{.pop.}
+
 proc interpret*(code: string; input, output: Stream) =
   ## Interprets the brainfuck `code` string, reading from `input` and writing
   ## to `output`.
@@ -37,7 +46,6 @@ proc interpret*(code: string; input, output: Stream) =
   ##   var inpStream = newStringStream("Hello World!\n")
   ##   var outStream = newFileStream(stdout)
   ##   interpret(readFile("examples/rot13.b"), inpStream, outStream)
-  {.overflowchecks: off.}
   var
     tape = newSeq[char]()
     codePos = 0
@@ -57,8 +65,8 @@ proc interpret*(code: string; input, output: Stream) =
         return tape[tapePos] != '\0'
       elif not skip:
         case code[codePos]
-        of '+': inc tape[tapePos]
-        of '-': dec tape[tapePos]
+        of '+': xinc tape[tapePos]
+        of '-': xdec tape[tapePos]
         of '>': inc tapePos
         of '<': dec tapePos
         of '.': output.write tape[tapePos]
@@ -112,8 +120,8 @@ proc compile(code, input, output: string): NimNode {.compiletime.} =
 
   for c in code:
     case c
-    of '+': addStmt "inc tape[tapePos]"
-    of '-': addStmt "dec tape[tapePos]"
+    of '+': addStmt "xinc tape[tapePos]"
+    of '-': addStmt "xdec tape[tapePos]"
     of '>': addStmt "inc tapePos"
     of '<': addStmt "dec tapePos"
     of '.': addStmt "outStream.write tape[tapePos]"
