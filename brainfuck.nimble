@@ -1,12 +1,14 @@
-[Package]
-name          = "brainfuck"
+# Package
+
 version       = "1.0"
 author        = "Dennis Felsing"
 description   = "A brainfuck interpreter and compiler"
 license       = "MIT"
 
 srcDir        = "src"
-bin           = "brainfuck"
+bin           = @["brainfuck"]
 
-[Deps]
-Requires: "nim >= 0.10.0, docopt >= 0.1.0"
+# Dependencies
+
+requires "nim >= 0.10.0"
+requires "docopt >= 0.1.0"
