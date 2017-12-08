@@ -20,9 +20,9 @@ dependencies:
 
 compile:
   override:
-    - nimble build
+    - nimble build -y
 
 ## Customize test commands
 test:
   override:
-    - nimble test
+    - nimble test -y
