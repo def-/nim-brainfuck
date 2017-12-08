@@ -7,6 +7,7 @@ dependencies:
           cd ~/nim/csources; sh build.sh; cd ..; rm -rf csources
           ln -fs ~/nim/bin/nim ~/bin/nim
           bin/nim c koch; ./koch boot -d:release; ./koch nimble
+          ln -fs ~/nim/bin/nimble ~/bin/nimble
         else
           cd ~/nim; git fetch origin
           git merge FETCH_HEAD | grep "Already up-to-date" || (bin/nim c koch; ./koch boot -d:release; ./koch nimble)
