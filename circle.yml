@@ -1,5 +1,5 @@
 dependencies:
-  pre:
+  override:
     - |
         if [ ! -x ~/nim/bin/nim ]; then
           git clone -b devel --depth 1 https://github.com/nim-lang/Nim ~/nim/
@@ -16,6 +16,10 @@ dependencies:
     - "~/bin/"
     - "~/nim/"
     - "~/.nimble/"
+
+compile:
+  override:
+    - nimble build
 
 ## Customize test commands
 test:
