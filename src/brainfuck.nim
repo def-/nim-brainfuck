@@ -104,7 +104,7 @@ import macros
 proc compile(code, input, output: string): NimNode {.compiletime.} =
   var stmts = @[newStmtList()]
 
-  template addStmt(text): stmt =
+  template addStmt(text): typed =
     stmts[stmts.high].add parseStmt(text)
 
   addStmt """
@@ -137,7 +137,7 @@ proc compile(code, input, output: string): NimNode {.compiletime.} =
   result = stmts[0]
   #echo result.repr
 
-macro compileString*(code: string; input, output: expr): stmt =
+macro compileString*(code: string; input, output: untyped): typed =
   ## Compiles the brainfuck code read from `filename` at compile time into Nim
   ## code that reads from the `input` variable and writes to the `output`
   ## variable, both of which have to be strings.
@@ -145,13 +145,13 @@ macro compileString*(code: string; input, output: expr): stmt =
     "newStringStream(" & $input & ")", "newStringStream()")
   result.add parseStmt($output & " = outStream.data")
 
-macro compileString*(code: string): stmt =
+macro compileString*(code: string): typed =
   ## Compiles the brainfuck `code` string into Nim code that reads from stdin
   ## and writes to stdout.
   echo code
   compile($code, "stdin.newFileStream", "stdout.newFileStream")
 
-macro compileFile*(filename: string; input, output: expr): stmt =
+macro compileFile*(filename: string; input, output: untyped): typed =
   ## Compiles the brainfuck code read from `filename` at compile time into Nim
   ## code that reads from the `input` variable and writes to the `output`
   ## variable, both of which have to be strings.
@@ -166,7 +166,7 @@ macro compileFile*(filename: string; input, output: expr): stmt =
     "newStringStream(" & $input & ")", "newStringStream()")
   result.add parseStmt($output & " = outStream.data")
 
-macro compileFile*(filename: string): stmt =
+macro compileFile*(filename: string): typed =
   ## Compiles the brainfuck code read from `filename` at compile time into Nim
   ## code that reads from stdin and writes to stdout.
   ##
